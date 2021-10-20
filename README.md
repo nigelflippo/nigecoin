@@ -6,21 +6,21 @@ A proof of concept blockchain that I wrote to create Nigecoin, my own crypto coi
 ## Blocks
 ```python
 {
-	'index': <int> # blockchain index
-	'timestamp': <str> # datetime timestamp
-	'proof': <int> #proof of work
-	'previous_hash': <str> # previous block hash
-	'transactions': [<transactions>] # list of transactions
-	'merkle_root': <str> # root of transactional merkle tree
-	'merkle_tree': [[<transactions>]]
+	'index': <int>, # blockchain index
+	'timestamp': <str>, # datetime timestamp
+	'proof': <int>, #proof of work
+	'previous_hash': <str>, # previous block hash
+	'transactions': [<transactions>], # list of transactions
+	'merkle_root': <str>, # root of transactional merkle tree
+	'merkle_tree': [[<transactions>]],
 }
 ```
 ## Transactions
 ```python
 {
-	'sender': <str> # transaction sender
-	'receiver': <str> # transaction recipient
-	'amount' <int> # transaction amount
+	'sender': <str>, # transaction sender
+	'receiver': <str>, # transaction recipient
+	'amount' <int>, # transaction amount
 }
 ```
 
@@ -39,7 +39,7 @@ A proof of concept blockchain that I wrote to create Nigecoin, my own crypto coi
 
 `GET /replace_chain`
 
-## RUN
+## Run Locally
 
 `export FLASK_APP=blockchain`
 

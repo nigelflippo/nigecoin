@@ -38,3 +38,9 @@ A proof of concept blockchain that I wrote to create Nigecoin, my own crypto coi
 `POST /connect_node`
 
 `GET /replace_chain`
+
+## RUN
+
+`export FLASK_APP=blockchain`
+
+`flask run`

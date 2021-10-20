@@ -22,7 +22,7 @@ class Blockchain:
         self.nodes = set()
 
     def create_block(self, proof: str, previous_hash: str) -> Block:
-        merkle_tree = self.get_merkle(self.transactions)
+        # implement merkle_tree
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,

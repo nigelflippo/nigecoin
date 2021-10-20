@@ -5,28 +5,39 @@ from flask import Flask, jsonify, request
 import requests
 from uuid import uuid4
 from urllib.parse import urlparse
+from typing import List, Dict
+
+class Block:
+    def __init__(self) -> None:
+        pass
+class Transaction:
+    def __init__(self) -> None:
+        pass
 
 class Blockchain:
-    def __init__(self):
-        self.chain = []
-        self.transactions = []
+    def __init__(self) -> None:
+        self.chain: List[Block] = []
+        self.transactions: List[Transaction] = []
         self.create_block(proof = 1, previous_hash = '0')
         self.nodes = set()
 
-    def create_block(self, proof, previous_hash):
+    def create_block(self, proof: str, previous_hash: str) -> Block:
+        merkle_tree = self.get_merkle(self.transactions)
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,
                  'previous_hash': previous_hash,
-                 'transactions': self.transactions}
+                 'transactions': self.transactions,
+                 'merkle_root': merkle_tree[0][0],
+                 'merkle_tree': merkle_tree}
         self.transactions = []
         self.chain.append(block)
         return block
 
-    def get_previous_block(self):
+    def get_previous_block(self) -> Block:
         return self.chain[-1]
 
-    def proof_of_work(self, previous_proof):
+    def proof_of_work(self, previous_proof: str) -> str:
         new_proof = 1
         check_proof = False
         while check_proof is False:
@@ -37,11 +48,11 @@ class Blockchain:
                 new_proof += 1
         return new_proof
 
-    def hash(self, block):
+    def hash(self, block: Block) -> str:
         encoded_block = json.dumps(block, sort_keys = True).encode()
         return hashlib.sha256(encoded_block).hexdigest()
 
-    def is_chain_valid(self, chain):
+    def is_chain_valid(self, chain: List[Dict]) -> bool:
         previous_block = chain[0]
         block_index = 1
         while block_index < len(chain):
@@ -56,21 +67,21 @@ class Blockchain:
             previous_block = block
             block_index += 1
         return True
-    
-    def add_transaction(self, sender, receiver, amount):
+
+    def add_transaction(self, sender: str, receiver: str, amount: str) -> Block:
         self.transactions.append({
-			'sender': sender,
-			'receiver': receiver,
-			'amount': amount
-		})
+            'sender': sender,
+            'receiver': receiver,
+            'amount': amount
+        })
         previous_block = self.get_previous_block()
         return previous_block['index'] + 1
-    
-    def add_node(self, address):
+
+    def add_node(self, address: str) -> None:
         parsed_url = urlparse(address)
         self.nodes.add(parsed_url.netloc)
-        
-    def replace_chain(self):
+
+    def replace_chain(self) -> bool:
         network = self.nodes
         longest_chain = None
         max_length = len(self.chain)
